@@ -1,4 +1,4 @@
-(ns tp3.reddit
+(ns reddit-nlp.reddit
   (:require [cheshire.core :as cheshire]
             [org.httpkit.client :as http]))
 

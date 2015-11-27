@@ -1,5 +1,5 @@
-(ns tp3.core
-  (:require [tp3.reddit :as reddit]))
+(ns reddit-nlp.core
+  (:require [reddit-nlp.reddit :as reddit]))
 
 (defn -main
   [& args]
