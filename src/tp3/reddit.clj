@@ -66,8 +66,9 @@
       parse-all-comment-subtrees))
 
 (defn comments-of-post
-  [permalink]
-  (-> permalink
+  [post]
+  (-> post
+      :permalink
       permalink->url
       http/get
       deref
