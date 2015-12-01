@@ -4,6 +4,7 @@
 
 (def reddit-base-url "http://reddit.com")
 
+(def relevant-post-attributes [:permalink :url :score])
 (def relevant-comment-attributes [:body :guilded :score])
 
 ;;===========================================
@@ -13,13 +14,19 @@
   [subreddit-name]
   (str reddit-base-url "/r/" subreddit-name ".json"))
 
+(defn- extract-post-attributes
+  [post-list]
+  (->> post-list 
+       (map :data)
+       (map #(select-keys % relevant-post-attributes))))
+
 (defn- parse-posts
   [raw-post-json]
   (-> raw-post-json
       (cheshire/parse-string true)
       :data
       :children
-      (#(map :data %))))
+      extract-post-attributes))
 
 (defn- fetch-posts
   [url]
