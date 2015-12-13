@@ -16,7 +16,7 @@
 
 (defn- extract-post-attributes
   [post-list]
-  (->> post-list 
+  (->> post-list
        (map :data)
        (map #(select-keys % relevant-post-attributes))))
 
@@ -66,7 +66,7 @@
   (let [comment-data (:data comment)]
     (select-keys comment-data relevant-comment-attributes)))
 
-(defn- parse-comment-subtree 
+(defn- parse-comment-subtree
   [subtree]
   (assoc (extract-relevant-attributes subtree)
          :replies
@@ -77,7 +77,7 @@
 (defn- parse-all-comment-subtrees
   [raw-comment-map]
   (->> (get-in raw-comment-map [:data :children])
-       (filter #(= "Listing" (:kind %)))
+       (filter #(= "t1" (:kind %)))
        (map parse-comment-subtree)))
 
 ;;===========================================

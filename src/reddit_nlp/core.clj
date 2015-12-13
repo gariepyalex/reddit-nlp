@@ -12,4 +12,3 @@
     (println (format "There is %d comments on the first post"
                      number-of-comments))
     (println text)))
-    
