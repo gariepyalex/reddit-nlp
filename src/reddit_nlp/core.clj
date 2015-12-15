@@ -4,7 +4,7 @@
 
 (defn -main
   [& args]
-  (let [comments (-> "worldnews"
+  (let [comments (-> (str (first args))
                      reddit/hot-posts-of-subreddit
                      second
                      reddit/comments-of-post)
@@ -13,4 +13,4 @@
     (println (format "There is %d comments on the first post"
                      number-of-comments))
     (println text)
-    (nlp/analyze text)))
+    (println (nlp/analyze text))))
