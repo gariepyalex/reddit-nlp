@@ -11,7 +11,7 @@
            (edu.stanford.nlp.sentiment SentimentCoreAnnotations$SentimentAnnotatedTree)
            (edu.stanford.nlp.neural.rnn RNNCoreAnnotations)))
 
-(def annotators "tokenize, ssplit, pos, lemma, ner ,parse, sentiment")
+(def annotators "tokenize, ssplit, pos, lemma, ner, parse, sentiment")
 
 (def stanford-nlp-pipeline (StanfordCoreNLP.
                             (doto (Properties.)
@@ -34,7 +34,7 @@
 (defn- annotate-tokens
   [^CoreMap sentence]
   (for [token (.get sentence CoreAnnotations$TokensAnnotation)]
-    {:token (.get token CoreAnnotations$TextAnnotation)
+    {:text (.get token CoreAnnotations$TextAnnotation)
      :pos (.get token CoreAnnotations$PartOfSpeechAnnotation)
      :ne (.get token CoreAnnotations$NamedEntityTagAnnotation)}))
 
@@ -45,3 +45,18 @@
       {:text (.toString sentence)
        :tokens (annotate-tokens sentence)
        :sentiment (sentiment-description (Integer. (RNNCoreAnnotations/getPredictedClass tree)))})))
+
+(defn- named-entities-of-analyzed-sentence
+  [sentence]
+  (remove nil? 
+          (for [token (:tokens sentence)]
+            (if (not= (:ne token) "O") token))))
+
+(defn named-entities-per-sentence
+  [text]
+  (for [sentence (analyze text)]
+    (named-entities-of-analyzed-sentence sentence)))
+
+(defn named-entities
+  [text]
+  (apply concat (named-entities-per-sentence text)))
