@@ -3,11 +3,11 @@
            (edu.stanford.nlp.pipeline StanfordCoreNLP Annotation)
            (edu.stanford.nlp.util CoreMap)
            (edu.stanford.nlp.trees Tree)
-           (edu.stanford.nlp.ling CoreAnnotations$SentencesAnnotation)
-           (edu.stanford.nlp.ling CoreAnnotations$TokensAnnotation)
-           (edu.stanford.nlp.ling CoreAnnotations$TextAnnotation)
-           (edu.stanford.nlp.ling CoreAnnotations$PartOfSpeechAnnotation)
-           (edu.stanford.nlp.ling CoreAnnotations$NamedEntityTagAnnotation)
+           (edu.stanford.nlp.ling CoreAnnotations$SentencesAnnotation
+                                  CoreAnnotations$TokensAnnotation
+                                  CoreAnnotations$TextAnnotation
+                                  CoreAnnotations$PartOfSpeechAnnotation
+                                  CoreAnnotations$NamedEntityTagAnnotation)
            (edu.stanford.nlp.sentiment SentimentCoreAnnotations$SentimentAnnotatedTree)
            (edu.stanford.nlp.neural.rnn RNNCoreAnnotations)))
 
@@ -40,7 +40,7 @@
 
 (defn analyze
   [^String text]
-  (for [sentence (.get (annotate text) CoreAnnotations$SentencesAnnotation)]    
+  (for [sentence (.get (annotate text) CoreAnnotations$SentencesAnnotation)]
     (let [tree (.get sentence SentimentCoreAnnotations$SentimentAnnotatedTree)]
       {:text (.toString sentence)
        :tokens (annotate-tokens sentence)
@@ -48,7 +48,7 @@
 
 (defn- named-entities-of-analyzed-sentence
   [sentence]
-  (remove nil? 
+  (remove nil?
           (for [token (:tokens sentence)]
             (if (not= (:ne token) "O") token))))
 
