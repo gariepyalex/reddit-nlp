@@ -94,14 +94,34 @@
       second
       parse-all-comment-subtrees))
 
-(defn comments-of-post
+(defn- body-of-post
   [post]
   (-> post
       :permalink
       permalink->url
       http/get
       deref
-      :body
+      :body))
+
+(defn- parse-title
+  [raw-title-json]
+  (-> raw-title-json
+      (cheshire/parse-string true)
+      first
+      :data
+      :children
+      first
+      :data
+      :title))
+
+(defn title-of-post
+  [post]
+  (-> (body-of-post post)
+      (parse-title)))
+
+(defn comments-of-post
+  [post]
+  (-> (body-of-post post)
       parse-comments))
 
 (defn comment-subtree-seq
