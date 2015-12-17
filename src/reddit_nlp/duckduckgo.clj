@@ -14,4 +14,5 @@
       http/get
       deref
       :body
+      slurp
       (cheshire/parse-string true)))
