@@ -1,6 +1,7 @@
 (ns reddit-nlp.core
   (:require [reddit-nlp.reddit :as reddit]
-            [reddit-nlp.stanford-nlp-wrapper :as nlp]))
+            [reddit-nlp.stanford-nlp-wrapper :as nlp]
+            [reddit-nlp.duckduckgo :as ddgo]))
 
 (defn -main
   [& args]
