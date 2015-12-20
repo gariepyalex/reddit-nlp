@@ -27,4 +27,4 @@
   (for [el (instant-answers named-entities)]
     {:topic (:Heading el)
      :abstract (:Abstract el)
-     :related (map :FirstURL (:RelatedTopics el))}))
+     :related (remove nil? (map :FirstURL (:RelatedTopics el)))}))

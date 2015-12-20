@@ -46,6 +46,19 @@
        :tokens (annotate-tokens sentence)
        :sentiment (sentiment-description (Integer. (RNNCoreAnnotations/getPredictedClass tree)))})))
 
+(defn- analyze-for-each
+  [^String text symb]
+  (for [sentence (analyze text)]
+    (symb sentence)))
+
+(defn analyze-tokens
+  [^String text]
+  (analyze-for-each text :tokens))
+
+(defn analyze-sentiment
+  [^String text]
+  (analyze-for-each text :sentiment))
+
 (defn- named-entities-of-analyzed-sentence
   [sentence]
   (remove nil?
