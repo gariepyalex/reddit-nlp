@@ -75,16 +75,17 @@
   (apply concat (named-entities-per-sentence text)))
 
 (defn- conj-entity
-  [ent1 ent2]
-  (if (= (:ne ent1) (:ne ent2)) 
-    (list {:ne (:ne ent1)
-      :pos (str (:pos ent1) "+" (:pos ent2))
-      :text (str (:text ent1) "+" (:text ent2))
-      }) 
-    (list ent1 ent2)))
+  [entities entity]
+  (let [last-entity (last entities)
+        last-entity-index (dec (count entities))]
+    (if (= (:ne entity)
+           (:ne last-entity))
+      (assoc entities last-entity-index
+             {:ne (:ne last-entity)
+              :pos (str (:pos last-entity) "+" (:pos entity))
+              :text (str (:text last-entity) "+" (:text entity))})
+      (conj entities entity))))
 
 (defn group-entities
   [named-entities]
-  (for [ne named-entities]
-    (flatten (reduce conj-entity named-entities))))
-
+  (reduce conj-entity [] named-entities))

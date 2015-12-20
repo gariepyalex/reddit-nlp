@@ -6,6 +6,7 @@
                  [http-kit "2.1.18"]
                  [edu.stanford.nlp/stanford-corenlp "3.5.2"]]
   :resource-paths ["lib/stanford-corenlp-models-current.jar"]
-                 :main ^:skip-aot reddit-nlp.core
+  :main ^:skip-aot reddit-nlp.core
+  :test-paths ["test"]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
