@@ -128,7 +128,7 @@
 
 (defn comment-subtree-seq
   [subtree]
-  (tree-seq #(empty? (get % :replies))
+  (tree-seq #(not (empty? (get % :replies)))
             #(get % :replies)
             subtree))
 
