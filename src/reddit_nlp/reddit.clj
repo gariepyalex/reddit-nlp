@@ -116,12 +116,14 @@
 
 (defn title-of-post
   [post]
-  (-> (body-of-post post)
-      (parse-title)))
+  (-> post
+      body-of-post
+      parse-title))
 
 (defn comments-of-post
   [post]
-  (-> (body-of-post post)
+  (-> post
+      body-of-post
       parse-comments))
 
 (defn comment-subtree-seq
