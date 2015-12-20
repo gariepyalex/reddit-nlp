@@ -15,3 +15,8 @@
     (is (= "Coca+Cola" (:text (last grouped-entities))))
     (is (= 4 (count grouped-entities)))))
 
+(deftest named-entities-test
+  (let [named-entities-only (named-entities test-named-entity-vector)]
+    (is (= 4 (count named-entities-only)))
+    (for [entity named-entities-only]
+      (is (not= "O" (:ne entity))))))
