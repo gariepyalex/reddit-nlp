@@ -59,20 +59,11 @@
   [^String text]
   (analyze-for-each text :sentiment))
 
-(defn- named-entities-of-analyzed-sentence
-  [sentence]
-  (remove nil?
-          (for [token (:tokens sentence)]
-            (if (not= (:ne token) "O") token))))
-
-(defn named-entities-per-sentence
-  [text]
-  (for [sentence (analyze text)]
-    (named-entities-of-analyzed-sentence sentence)))
-
 (defn named-entities
-  [text]
-  (apply concat (named-entities-per-sentence text)))
+  [entities]
+  (remove nil?
+          (for [token entities]
+            (if (not= (:ne token) "O") token))))
 
 (defn- conj-entity
   [entities entity]
