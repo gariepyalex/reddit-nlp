@@ -4,7 +4,7 @@
 
 (def reddit-base-url "http://reddit.com")
 
-(def relevant-post-attributes [:permalink :url :score])
+(def relevant-post-attributes [:id :permalink :url :score])
 (def relevant-comment-attributes [:body :guilded :score])
 
 ;;===========================================
