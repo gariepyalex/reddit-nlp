@@ -80,3 +80,11 @@
 (defn group-entities
   [named-entities]
   (reduce conj-entity [] named-entities))
+
+(defn analyze-named-entities
+  [text]
+  (-> text
+      analyze-tokens
+      flatten
+      group-entities
+      named-entities))
