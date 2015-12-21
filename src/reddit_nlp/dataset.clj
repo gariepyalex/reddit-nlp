@@ -21,7 +21,7 @@
 (defn dataset
   []
   (let [files (filter #(not (.isDirectory %))
-                      (file-seq (io/file dataset-base-dir)))]
+                      (file-seq (io/file (io/resource "dataset"))))]
     (for [file files]
       (read-string (slurp file)))))
 
