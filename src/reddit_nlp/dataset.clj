@@ -40,6 +40,10 @@
     (for [file files]
       (read-string (slurp file)))))
 
+(defn webdataset
+  [subreddit]
+  (read-string (slurp (io/file (io/resource (str "webdataset/" subreddit))))))
+
 ;; The simplest way to run this is with 'lein run -m reddit-nlp.dataset subreddit-name'
 (defn -main
   [subreddit & args]
