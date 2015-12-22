@@ -12,7 +12,7 @@
     [:h4.mdl-card__title-text text]]])
 
 (defn sentiment-analysis-page
-  []
+  [cards]
   (hiccup/html5
    [:head
     [:meta {:charset "UTF-8"}]
@@ -27,11 +27,11 @@
       [:div.mdl-grid
        [:div.mdl-cell.mdl-cell--12-col
         [:h1 "Reddit - NLP"]]
-       (for [i (range 20)]
-         (mdl-card (str i)))]]]]))
+       (for [i cards]
+         (mdl-card (str i " " i)))]]]]))
 
 (defroutes app-routes
-  (GET "/" [] (sentiment-analysis-page))
+  (GET "/" [] (sentiment-analysis-page (range 20)))
   (route/resources "/")
   (route/not-found "404 - these are not the droid you're looking for."))
 
