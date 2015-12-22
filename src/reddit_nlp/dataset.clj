@@ -28,8 +28,8 @@
     file-name))
 
 (defn create-webdataset!
-  [subreddit]
-  (doseq [cards (core/cards subreddit 20)]
+  [subreddit cards]
+  (doseq [card cards]
     (let [file (webdataset-file subreddit)]
       (spit file {:cards cards}))))
 
@@ -45,5 +45,5 @@
   [subreddit & args]
   ;; (let [posts (reddit/hot-posts-of-subreddit subreddit)]
   ;;   (create-dataset! posts))
-  (create-webdataset! subreddit)
+  (create-webdataset! subreddit (core/cards subreddit 20))
   (println "dataset has been created"))
