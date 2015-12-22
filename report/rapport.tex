@@ -60,9 +60,37 @@ Nous avons donc décidé que nous allions détecter les entitées nommées dans 
 
 \section{Expérimentation}
 
+En ce qui concerne l'expérimentation, comme le projet présente plusieurs aspects vus en cours, les éléments sont présentés en détails dans les sous-sections suivantes.
+
+\subsection{API Reddit \& Gestion des arbres dégénérés}
+
+Heureusement pour nous, \verb;reddit; offre une API \textit{JSON} très complète. Il ne suffit qu'à avoir l'url d'un \verb;subreddit;, par exemple\\
+
+\url{https://www.reddit.com/r/worldnews}\\
+
+et lui ajouter l'extension \verb;.json;:\\
+
+\url{https://www.reddit.com/r/worldnews.json}\\
+
+pour obtenir l'intégralité de la page en \textit{JSON} plutôt que d'obtenir la page html standard.
+
+Une fois le \textit{JSON} parsé, il faut par la suite savoir comment gérer la dégénération des arbres de commentaires. Nous avons opté pour une solution d'applanissement (\textit{flattenization}), c'est-à-dire, qu'en entrée, nous avons l'arbre, et en sortie une liste plane de commentaires. Pour un meilleur exemple, voir l'implémentation de \verb;flatten-comments; dans \verb;reddit.clj;.
+
+\subsection{Stanford Core NLP}
+
+Après avoir effectué quelques recherches, nous avons décidé d'utiliser \textit{Stanford Core NLP} pour notre engin d'expérimentation. Cette technologie s'applique bien avec le choix du langage de programmation du projet. En effet, \textit{Stanford Core NLP}, en plus d'être très complet, est implémenté en Java, ainsi il est assez facile de l'interfacer en Clojure, ce dernier roulant également sous la JVM.
+
+\subsubsection{Détection d'entités nommées}
+\subsubsection{Analyse de sentiments}
+
+\subsection{DuckDuckGo \textit{Instant-Answer} API}
+
 
 
 \section{Résultats}
+
+\subsection{Utilisation \textit{offline} du corpus}
+\subsection{Présentation du UI}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
