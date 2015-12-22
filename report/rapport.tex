@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage[frenchb]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{hyperref}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+\begin{document}
+\selectlanguage{frenchb} 
+\title{NLP \\ Travail pratique 3 - Reddit NLP}
+\author{Jonathan Gingras \& Alexandre Gariépy}
+\maketitle
+
+\begin{center}
+  \textbf{Date de remise :} 24 décembre 2015, 23h55.
+\end{center}
+\begin{center}
+  \center{\textbf{Numéro du cours:} IFT-7022}
+\end{center}
+\begin{center}
+  \begin{tabular}{|c|c|}              \hline
+    Nom               & Matricule   \\\hline
+    Alexandre Gariépy & 111 046 788 \\\hline
+    Jonathan Gingras  & 111 004 940 \\\hline
+  \end{tabular}
+\end{center}
+
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Présentation du travail}
+Dans ce travail, nous avons choisit de mener une expérimentation sur la détection d'entitées nommées et l'analyse de sentiment en utilisant un logiciel existant, Stanford Core NLP \footnote{\url{http://stanfordnlp.github.io/CoreNLP/}}. Nous avons également choisit de se servir d'un corpus bien particulier, soit Reddit \footnote{\url{https://www.reddit.com}}, l'autoproclamée \textit{front page of the internet}.\\
+
+Le travail est implémenté en Clojure et comporte 6 modules :
+\begin{itemize}
+\item core.clj
+\item dataset.clj
+\item duckduckgo.clj
+\item reddit.clj
+\item stanford\_nlp\_wrapper.clj
+\item web.clj
+\end{itemize}
+
+Pour mieux décrire l'apporche utilisée et le problème que nous avons essayé de résoudre, \verb;reddit; est un site dans lequel les utilisateurs postent des entrée (de longueure relativement petite) et où les autres utilisateurs répondre avec des commentaires. Chaque commentaire peut à son tour être commenté, ce qui résulte en une structure d'arbre dégénéré de commentaires pour chaque post. De plus, \verb;reddit; comporte plusieurs \verb;subreddits;. Ces derniers correspondent à une catégorie et il en existe une multitude casi-infinie.\\
+
+Nous avons donc décidé que nous allions détecter les entitées nommées dans le titre du poste et analyser les sentiments des commentaires associées. Par la suite, il serait possible dénumérer les résultats des posts pour un \verb;subreddit; donné.
+
+\section{Expérimentation}
+
+
+
+\section{Résultats}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

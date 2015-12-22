@@ -9,6 +9,10 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+*.DS_Store
+/report/*.aux
+/report/*.log
+/report/*.out
 
 # emacs
 *~
