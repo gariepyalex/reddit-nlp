@@ -42,7 +42,10 @@
 
 (defn webdataset
   [subreddit]
-  (read-string (slurp (io/file (io/resource (str "webdataset/" subreddit))))))
+  (let [file (io/file (io/resource (str "webdataset/" subreddit)))]
+    (if file
+      (read-string (slurp file))
+      {:cards []})))
 
 ;; The simplest way to run this is with 'lein run -m reddit-nlp.dataset subreddit-name'
 (defn -main

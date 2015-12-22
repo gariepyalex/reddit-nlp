@@ -15,7 +15,7 @@
 
 (defn comments-average-sentiment
   [comments]
-  (sentiment-mean (flatten (for [comment (take 5 (sort-by :score > comments))] 
+  (sentiment-mean (flatten (for [comment (take 5 (sort-by :score > comments))]
                              (nlp/analyze-sentiment (:body comment))))))
 
 (defn cards
@@ -26,16 +26,3 @@
                :sentiment (comments-average-sentiment (reddit/flatten-comments (reddit/comments-of-post post)))
                :topics (ddgo/structured-instant-answers (nlp/analyze-named-entities (reddit/title-of-post post)))
                }))))
-
-(defn -main
-  [& args]
-  (let [comments (-> (str (first args))
-                     reddit/hot-posts-of-subreddit
-                     second
-                     reddit/comments-of-post)
-        number-of-comments (count (reddit/all-comments-flat-seq comments))
-        text (:body (first comments))]
-    (println (format "There is %d comments on the first post"
-                     number-of-comments))
-    (println text)
-    (println (nlp/analyze text))))
