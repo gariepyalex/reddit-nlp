@@ -23,7 +23,7 @@
     (.annotate stanford-nlp-pipeline document)
     document))
 
-(defn- sentiment-description
+(defn sentiment-description
   [score]
   ((keyword (str score)) {:0 "Very negative"
                           :1 "Negative"
@@ -44,7 +44,7 @@
     (let [tree (.get sentence SentimentCoreAnnotations$SentimentAnnotatedTree)]
       {:text (.toString sentence)
        :tokens (annotate-tokens sentence)
-       :sentiment (sentiment-description (Integer. (RNNCoreAnnotations/getPredictedClass tree)))})))
+       :sentiment (Integer. (RNNCoreAnnotations/getPredictedClass tree))})))
 
 (defn- analyze-for-each
   [^String text symb]

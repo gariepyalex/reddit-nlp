@@ -4,7 +4,8 @@
 
 (def reddit-base-url "http://reddit.com")
 
-(def relevant-post-attributes [:id :permalink :url :score])
+(def relevant-post-attributes [:id :title :permalink :url :score
+                               ])
 (def relevant-comment-attributes [:body :guilded :score])
 
 ;;===========================================
@@ -103,22 +104,9 @@
       deref
       :body))
 
-(defn- parse-title
-  [raw-title-json]
-  (-> raw-title-json
-      (cheshire/parse-string true)
-      first
-      :data
-      :children
-      first
-      :data
-      :title))
-
 (defn title-of-post
   [post]
-  (-> post
-      body-of-post
-      parse-title))
+  (:title post))
 
 (defn comments-of-post
   [post]
@@ -140,3 +128,11 @@
   [all-comments-subtrees]
   (map #(select-keys % relevant-comment-attributes)
        (all-comments-seq all-comments-subtrees)))
+
+;;===========================================
+
+(defn flatten-comments
+  [comments]
+  (->> comments
+       all-comments-flat-seq
+       (remove empty?)))
