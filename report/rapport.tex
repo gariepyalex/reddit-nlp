@@ -99,6 +99,7 @@ devient
 Cette réduction est nécéssaire, car \textit{Stanford Core NLP}, du moins selon notre configuration, ne retourne pas de \textit{B} ou de \textit{I}.
 
 \subsubsection{Analyse de sentiments}
+\label{sec:sentiment-analysis}
 
 Pour l'analyse des sentiments, \textit{Stanford Core NLP} fournit cette \textit{feature}. Toutefois, il faut télécharger un \verb;.jar; assez volumineux (environ 500 Mb)\footnote{\url{http://nlp.stanford.edu/software/stanford-corenlp-models-current.jar}}. Nous procédons donc ainsi pour chaque post: après l'obtention de la séquence de commentaires plane discutée en~\ref{sec:api-reddit}, nous trions la séquence en ordre décroissant de leur score, et considérons les 5 premiers. Le score des commentaires correspond aux \textit{upvotes} des utilisateurs qui les ont lus. Nous prenons donc comme prémisse que les commentaires les plus populaires reflètent les sentiments associés à la séquence. Notre implémentation nous permèttrait de monter le nombre de 5 à 10 ou 20, toutefois la performance de l'analyse de sentiments devient rappidement un problème (lors de la génération des résultats), c'est pour cela que nous nous limitons à 5, même si la présentation des résultats est hors ligne.
 
@@ -112,9 +113,51 @@ retourne une foule de liens par rapport aux entitées nommées \verb;Justin Trud
 
 \section{Résultats}
 
-\subsection{Comment rouler le projet}
+Dans cette section seront présentés les résultats de l'expérimentation.
+
 \subsection{Utilisation \textit{offline} du corpus}
+Tel que précédemment mentionné dans~\ref{sec:sentiment-analysis}, la performance de l'analyse de sentiments nous force à utiliser un ensemble de données hors ligne. Ainsi, pour générer les données nécéssaires associées à un \verb;subreddit; (par exemple \verb;/r/Pets;), nous utilisons le module \verb;dataset;:
+
+\begin{verbatim}
+lein run -m reddit-nlp.dataset "Pets"
+\end{verbatim}
+
+Les informations nécéssaires à l'affichage seront donc entrposées dans le répertoire \verb;resources/webdataset; et utilisables par le serveur UI.
+
 \subsection{Présentation du UI}
+
+Pour l'interface graphique, il suffit de rouler le serveur 
+
+\begin{verbatim}
+lein run -m reddit-nlp.web
+\end{verbatim}
+
+et d'accéder à au port 8000 du \verb;localhost; avec son navigateur. On peut voir un exemple à la figure~\ref{fig:ui-example}. Les \verb;subreddits; analysés sont accédables à partir de \verb;/;. La figure~\ref{fig:ui-example} présente par exemple, le \verb;subreddit; \verb;/r/justintrudeau;.\\
+
+Pour mieux expliquer la présentation, nous utilisons un code de couleur pour présenter les sentiments des commentaires reliées aux posts. Les couleurs sont présentées de façon relative par rapport aux sentiments minimal et maximal des posts présents. Donc, des sentiments très négatifs donneront une couleur mauve, neutres seront vert et très positifs seront rouge. La valeur moyenne calculée des sentiments des commentaires est présente. Elle correspond à la valeur retournée par \textit{Stanford Core NLP} :
+
+\begin{itemize}
+\item 0 : très négatif
+\item 1 : négatif
+\item 2 : neutre
+\item 3 : positif
+\item 4 : très positif
+\\
+\end{itemize}
+
+Par la suite, les entitées nommées détectées dans le titre des posts sont présentes dans le bas de chaque carte. Si un \textit{Abstract} est présent, il se trouve sous l'entitée. Il est possible de cliquer sur l'entitée, par exemple \verb;JUSTIN TRUDEAU; dans la figure~\ref{fig:ui-example}, et des liens pertinents apparaîtreront pour avoir plus d'information.
+
+\begin{figure}
+  \begin{center}
+    \title{UI - subreddit analysé: \verb;/r/justintrudeau;}
+  \end{center}
+  \includegraphics[width=18cm]{fig/ui-example.png}
+  \label{fig:ui-example}
+\end{figure}
+
+\subsection{Synthèse des résultats}
+
+Après l'observation de plusieurs \verb;subreddits;, on remarque une certaine tendance à la négativité des commentaires. La plupart sont sous la barre du 2, soit la neutralité. Cette tendance est possiblement attribuable au nombre de commentaires traités. Peut-être que les commentaires les plus populaires ont tendance à être les plus négatifs. Il est également possible que le jeux de données d'entraînement téléchargé ne soit pas adapté à ce genre de corpus qu'est \textit{reddit}. Pour ce qui est des entitées nommées analysées dans les titres, on en observe tout de même un nombre assez riche. Parfois certaines entitées évidentes pour nous, ne sont pas détectées et cela est peut-être aussi dû aux jeux d'entraînement. Pour ce qui est des \textit{Abstacts} retournés par \textit{DuckDuckGo}, on observe une bonne précision, mais un rappel qui laisse à désirer. Par contre, les liens retournés offrent un grand rappel et la précision est assez bonne.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
