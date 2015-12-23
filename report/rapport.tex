@@ -63,6 +63,7 @@ Nous avons donc décidé que nous allions détecter les entitées nommées dans 
 En ce qui concerne l'expérimentation, comme le projet présente plusieurs aspects vus en cours, les éléments sont présentés en détails dans les sous-sections suivantes.
 
 \subsection{API Reddit \& Gestion des arbres dégénérés}
+\label{sec:api-reddit}
 
 Heureusement pour nous, \verb;reddit; offre une API \textit{JSON} très complète. Il ne suffit qu'à avoir l'url d'un \verb;subreddit;, par exemple\\
 
@@ -81,14 +82,37 @@ Une fois le \textit{JSON} parsé, il faut par la suite savoir comment gérer la 
 Après avoir effectué quelques recherches, nous avons décidé d'utiliser \textit{Stanford Core NLP} pour notre engin d'expérimentation. Cette technologie s'applique bien avec le choix du langage de programmation du projet. En effet, \textit{Stanford Core NLP}, en plus d'être très complet, est implémenté en Java, ainsi il est assez facile de l'interfacer en Clojure, ce dernier roulant également sous la JVM.
 
 \subsubsection{Détection d'entités nommées}
+\label{sec:named-entities}
+
+Pour la partie concernant les entitées nommées, le titre de chaque post analysé est passé à \textit{Stanford Core NLP}. Le texte est d'abord tokenisé. Nour retenons par la suite, pour chaque jeton : le texte du jeton, le part-of-speech et la classe de l'entitée nommée (ou "O" si le jeton n'est pas une entitée nommée: nous conservons toutes les classes d'entitées). Pour ne pas perdre d'information, nous faisons une réduction pour regrouper les jetons de même classe et obtenir des entités entières. Par exemple, suite à la réduction, la phrase
+
+\begin{verbatim}
+{Here, is, Justin, Trudeau}
+\end{verbatim}
+
+devient
+
+\begin{verbatim}
+{Here, is, Justin+Trudeau}
+\end{verbatim}
+
+Cette réduction est nécéssaire, car \textit{Stanford Core NLP}, du moins selon notre configuration, ne retourne pas de \textit{B} ou de \textit{I}.
+
 \subsubsection{Analyse de sentiments}
+
+Pour l'analyse des sentiments, \textit{Stanford Core NLP} fournit cette \textit{feature}. Toutefois, il faut télécharger un \verb;.jar; assez volumineux (environ 500 Mb)\footnote{\url{http://nlp.stanford.edu/software/stanford-corenlp-models-current.jar}}. Nous procédons donc ainsi pour chaque post: après l'obtention de la séquence de commentaires plane discutée en~\ref{sec:api-reddit}, nous trions la séquence en ordre décroissant de leur score, et considérons les 5 premiers. Le score des commentaires correspond aux \textit{upvotes} des utilisateurs qui les ont lus. Nous prenons donc comme prémisse que les commentaires les plus populaires reflètent les sentiments associés à la séquence. Notre implémentation nous permèttrait de monter le nombre de 5 à 10 ou 20, toutefois la performance de l'analyse de sentiments devient rappidement un problème (lors de la génération des résultats), c'est pour cela que nous nous limitons à 5, même si la présentation des résultats est hors ligne.
 
 \subsection{DuckDuckGo \textit{Instant-Answer} API}
 
+Après l'extraction des entitées nommées des titres en~\ref{sec:named-entities}, nous avons jugé intéressant de trouver de l'information associée à chaque entitée et de la présenter dans notre interface graphique pour chaque post. Ainsi, le site \textit{DuckDuckGo} offre une API de réponse instantannée. Par exemple,\\
 
+\url{http://api.duckduckgo.com/?q=justin+trudeau&format=json}\\
+
+retourne une foule de liens par rapport aux entitées nommées \verb;Justin Trudeau;. L'API offre également parfois un cours texte, \textit{Abstract}, si le sujet est assez précis. Nous nous servons donc de ces liens et ce cours texte et les associons à chaque entitées nommées détectée.
 
 \section{Résultats}
 
+\subsection{Comment rouler le projet}
 \subsection{Utilisation \textit{offline} du corpus}
 \subsection{Présentation du UI}
 
