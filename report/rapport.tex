@@ -7,7 +7,13 @@
 \usepackage{amssymb}
 \usepackage{enumerate}
 \usepackage{hyperref}
-
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
@@ -18,11 +24,19 @@
 \addtolength{\textheight}{1.75in}
 
 \begin{document}
-\selectlanguage{frenchb} 
-\title{NLP \\ Travail pratique 3 - Reddit NLP}
+\selectlanguage{frenchb}
+\begin{figure}
+  \centering
+  \vspace{1cm}
+  \includegraphics[width=0.3\textwidth]{fig/u_Laval}
+  \vspace{1cm}
+\end{figure}
+\vspace{2cm}
+\title{\Large{IFT-7022 Techniques et applications du traitement de la langue naturelle} \\ Travail pratique 3 - Reddit NLP}
 \author{Jonathan Gingras \& Alexandre Gariépy}
+\date{}
 \maketitle
-
+\vspace{3cm}
 \begin{center}
   \textbf{Date de remise :} 24 décembre 2015, 23h55.
 \end{center}
@@ -54,9 +68,27 @@ Le travail est implémenté en Clojure et comporte 6 modules :
 \item web.clj
 \end{itemize}
 
-Pour mieux décrire l'apporche utilisée et le problème que nous avons essayé de résoudre, \verb;reddit; est un site dans lequel les utilisateurs postent des entrée (de longueure relativement petite) et où les autres utilisateurs répondre avec des commentaires. Chaque commentaire peut à son tour être commenté, ce qui résulte en une structure d'arbre dégénéré de commentaires pour chaque post. De plus, \verb;reddit; comporte plusieurs \verb;subreddits;. Ces derniers correspondent à une catégorie et il en existe une multitude casi-infinie.\\
+Pour mieux décrire l'apporche utilisée et le problème que nous avons essayé de résoudre, \verb;reddit; est un site dans lequel les utilisateurs partagent
+des liens, par exemple un article de journal, accompagnés d'un titre de longueur relativement petite.
+Par la suite, d'autres utilisateurs peuvent réagir un publiant des commentaires. Chaque commentaire peut à son tour être commenté,
+ce qui résulte en une structure d'arbre dégénéré de commentaires pour chaque post.
+De plus, \verb;reddit; comporte plusieurs \verb;subreddits;. Ces derniers correspondent à une catégorie et il en existe une multitude quasi-infinie.\\
 
-Nous avons donc décidé que nous allions détecter les entitées nommées dans le titre du poste et analyser les sentiments des commentaires associées. Par la suite, il serait possible dénumérer les résultats des posts pour un \verb;subreddit; donné.
+
+Notre projet consiste en la génération d'une page web décrivant les liens populaires sur \verb;reddit;. Dans un premier temps, on extrait les entités nommées
+du titre de la publication et on présente une courte description de ces entitées en plus de liens pertinents pour en savoir plus.
+Puis, on fais l'analyse des sentiments des commentaires pour présenter l'opinion des utilisateurs sur les sujets présentés dans la publication.
+
+\section{Exécution du projet}
+Le code source est disponible au \url{https://github.com/gariepyalex/reddit-nlp}. Voici les étapes à suivre pour l'exécution du projet:
+\begin{enumerate}
+\item Créer un dossier \verb;lib/; à la racine du projet et y télécharger le fichier \url{http://nlp.stanford.edu/software/stanford-corenlp-models-current.jar}. Ce fichier n'est pas inclus dans le dépôt à cause de sa taille.
+\item Faire la commande \textbf{lein run} à la racine du projet. Voir \emph{http://leiningen.org/} pour des instructions détaillées pour l'installation de \emph{lein}.
+\item Aller au \verb;localhost:8000; dans son navigateur web.
+\end{enumerate}
+
+Une alternative est de télécharger une version précompilée du projet, disponible au .. . Il s'agit d'un fichier \verb;.jar;. Pour exécuter le programme, il
+suffit d'entrer la commande \verb;java -jar nom_du_fichier.jar;.
 
 \section{Expérimentation}
 
@@ -79,12 +111,14 @@ Une fois le \textit{JSON} parsé, il faut par la suite savoir comment gérer la 
 
 \subsection{Stanford Core NLP}
 
-Après avoir effectué quelques recherches, nous avons décidé d'utiliser \textit{Stanford Core NLP} pour notre engin d'expérimentation. Cette technologie s'applique bien avec le choix du langage de programmation du projet. En effet, \textit{Stanford Core NLP}, en plus d'être très complet, est implémenté en Java, ainsi il est assez facile de l'interfacer en Clojure, ce dernier roulant également sous la JVM.
+Après avoir effectué quelques recherches, nous avons décidé d'utiliser \textit{Stanford Core NLP} pour notre engin d'expérimentation. Cette technologie s'applique bien avec le choix du langage de programmation du projet. En effet, \textit{Stanford Core NLP}, en plus d'être très complet, est implémenté en Java, ainsi il est assez facile de l'interfacer avec Clojure, ce dernier roulant également sous la JVM.
 
 \subsubsection{Détection d'entités nommées}
 \label{sec:named-entities}
 
-Pour la partie concernant les entitées nommées, le titre de chaque post analysé est passé à \textit{Stanford Core NLP}. Le texte est d'abord tokenisé. Nour retenons par la suite, pour chaque jeton : le texte du jeton, le part-of-speech et la classe de l'entitée nommée (ou "O" si le jeton n'est pas une entitée nommée: nous conservons toutes les classes d'entitées). Pour ne pas perdre d'information, nous faisons une réduction pour regrouper les jetons de même classe et obtenir des entités entières. Par exemple, suite à la réduction, la phrase
+Pour la partie concernant les entitées nommées, le titre de chaque post analysé est passé à \textit{Stanford Core NLP}. Notre hypothèse est que le titre, étant un court
+résumé du lien publié, contient les entitées nommés importantes.
+Pour extraire les entitées nommées, le texte est d'abord tokenisé. Nous retenons par la suite, pour chaque jeton : le texte du jeton, le part-of-speech et la classe de l'entitée nommée (ou "O" si le jeton n'est pas une entitée nommée: nous conservons toutes les classes d'entitées). Pour ne pas perdre d'information, nous faisons une réduction pour regrouper les jetons adjacents de même classe et obtenir des entités entières. Par exemple, suite à la réduction, la phrase
 
 \begin{verbatim}
 {Here, is, Justin, Trudeau}
@@ -97,15 +131,20 @@ devient
 \end{verbatim}
 
 Cette réduction est nécéssaire, car \textit{Stanford Core NLP}, du moins selon notre configuration, ne retourne pas de \textit{B} ou de \textit{I}.
+Dans la plupart des cas, par exemple pour \emph{Justin Trudeau} ou \emph{Coca Cola}, tous les tokens faisant partie de l'entitée nommée possède la même
+classe. Cette simplification s'est avérée suffisante en pratique.
 
 \subsubsection{Analyse de sentiments}
 \label{sec:sentiment-analysis}
 
-Pour l'analyse des sentiments, \textit{Stanford Core NLP} fournit cette \textit{feature}. Toutefois, il faut télécharger un \verb;.jar; assez volumineux (environ 500 Mb)\footnote{\url{http://nlp.stanford.edu/software/stanford-corenlp-models-current.jar}}. Nous procédons donc ainsi pour chaque post: après l'obtention de la séquence de commentaires plane discutée en~\ref{sec:api-reddit}, nous trions la séquence en ordre décroissant de leur score, et considérons les 5 premiers. Le score des commentaires correspond aux \textit{upvotes} des utilisateurs qui les ont lus. Nous prenons donc comme prémisse que les commentaires les plus populaires reflètent les sentiments associés à la séquence. Notre implémentation nous permèttrait de monter le nombre de 5 à 10 ou 20, toutefois la performance de l'analyse de sentiments devient rappidement un problème (lors de la génération des résultats), c'est pour cela que nous nous limitons à 5, même si la présentation des résultats est hors ligne.
+Pour l'analyse des sentiments, \textit{Stanford Core NLP} fournit cette \textit{feature}. Toutefois, il faut télécharger un \verb;.jar; assez volumineux (environ 500 Mb)\footnote{\url{http://nlp.stanford.edu/software/stanford-corenlp-models-current.jar}} qui contient le résultat de l'entrainement d'un classificateur.
+
+
+Voici notre démarche pour l'analyse des sentiments des arbre des commentaires: après l'obtention de la séquence de commentaires plane discutée en~\ref{sec:api-reddit}, nous trions la séquence en ordre décroissant de leur score, et considérons les 5 premiers. Le score des commentaires correspond aux \textit{upvotes} des utilisateurs qui les ont lus. Nous prenons donc comme hypothèse que les commentaires les plus populaires reflètent les sentiments généraux de tous les commentaires de séquence. Notre implémentation nous permettrait de monter le nombre de 5 à 10 ou 20, toutefois la performance de l'analyse de sentiments devient rappidement un problème (lors de la génération des résultats), c'est pour cela que nous nous limitons à 5, même si la présentation des résultats est hors ligne.
 
 \subsection{DuckDuckGo \textit{Instant-Answer} API}
 
-Après l'extraction des entitées nommées des titres en~\ref{sec:named-entities}, nous avons jugé intéressant de trouver de l'information associée à chaque entitée et de la présenter dans notre interface graphique pour chaque post. Ainsi, le site \textit{DuckDuckGo} offre une API de réponse instantannée. Par exemple,\\
+Après l'extraction des entitées nommées des titres en~\ref{sec:named-entities}, nous avons jugé intéressant de trouver de l'information associée à chaque entitée et de la présenter dans notre interface graphique pour chaque publication. Ainsi, le site \textit{DuckDuckGo} offre une API de réponse instantannée. Par exemple,\\
 
 \url{http://api.duckduckgo.com/?q=justin+trudeau&format=json}\\
 
@@ -119,20 +158,23 @@ Dans cette section seront présentés les résultats de l'expérimentation.
 Tel que précédemment mentionné dans~\ref{sec:sentiment-analysis}, la performance de l'analyse de sentiments nous force à utiliser un ensemble de données hors ligne. Ainsi, pour générer les données nécéssaires associées à un \verb;subreddit; (par exemple \verb;/r/Pets;), nous utilisons le module \verb;dataset;:
 
 \begin{verbatim}
-lein run -m reddit-nlp.dataset "Pets"
+lein run -m reddit-nlp.core "Pets"
 \end{verbatim}
 
 Les informations nécéssaires à l'affichage seront donc entrposées dans le répertoire \verb;resources/webdataset; et utilisables par le serveur UI.
 
 \subsection{Présentation du UI}
 
-Pour l'interface graphique, il suffit de rouler le serveur 
+Pour l'interface graphique, il suffit de rouler le serveur
 
 \begin{verbatim}
 lein run -m reddit-nlp.web
 \end{verbatim}
 
-et d'accéder à au port 8000 du \verb;localhost; avec son navigateur. On peut voir un exemple à la figure~\ref{fig:ui-example}. Les \verb;subreddits; analysés sont accédables à partir de \verb;/;. La figure~\ref{fig:ui-example} présente par exemple, le \verb;subreddit; \verb;/r/justintrudeau;.\\
+et d'accéder à au port 8000 du \verb;localhost; avec son navigateur. On peut voir un exemple à la figure~\ref{fig:ui-example}. Les \verb;subreddits; analysés sont accessibles à partir de \verb;/;. Par exemple, pour accéder à l'analyse du \emph{subreddit} sur Justin Trudeau, il suffit d'aller au \verb;localhost:8000/justintrudeau;.
+L'interface graphique comporte quelques liens pour accéder facilement à différent sujets.
+
+La figure~\ref{fig:ui-example} présente par exemple. \\
 
 Pour mieux expliquer la présentation, nous utilisons un code de couleur pour présenter les sentiments des commentaires reliées aux posts. Les couleurs sont présentées de façon relative par rapport aux sentiments minimal et maximal des posts présents. Donc, des sentiments très négatifs donneront une couleur mauve, neutres seront vert et très positifs seront rouge. La valeur moyenne calculée des sentiments des commentaires est présente. Elle correspond à la valeur retournée par \textit{Stanford Core NLP} :
 
@@ -147,7 +189,7 @@ Pour mieux expliquer la présentation, nous utilisons un code de couleur pour pr
 
 Par la suite, les entitées nommées détectées dans le titre des posts sont présentes dans le bas de chaque carte. Si un \textit{Abstract} est présent, il se trouve sous l'entitée. Il est possible de cliquer sur l'entitée, par exemple \verb;JUSTIN TRUDEAU; dans la figure~\ref{fig:ui-example}, et des liens pertinents apparaîtreront pour avoir plus d'information.
 
-\begin{figure}
+\begin{figure}[H]
   \begin{center}
     \title{UI - subreddit analysé: \verb;/r/justintrudeau;}
   \end{center}
