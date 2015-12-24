@@ -88,9 +88,12 @@ Le code source est disponible au \url{https://github.com/gariepyalex/reddit-nlp}
 \item Aller au \verb;localhost:8000; dans son navigateur web.
 \end{enumerate}
 
-\subsection{Binaire source}
+\subsection{Binaire}
 Une alternative est de télécharger une version précompilée du projet, disponible dans le dépôt\footnote{\url{https://github.com/gariepyalex/reddit-nlp/releases/download/0.1.0-SNAPSHOT/reddit-nlp-0.1.0-SNAPSHOT-standalone.jar}}. Il s'agit d'un fichier \verb;.jar;. Pour exécuter le programme, il
 suffit d'entrer la commande \textbf{java -jar nom\_du\_fichier.jar}.
+
+Cette version binaire ne contient que le code du client web. Il est possible de visualiser les données précalculées, mais le jar ne contient pas les dépendences
+vers \emph{stanford-core-nlp} pour créer de nouveau dataset. Cela permet d'avoir un binaire de petite taille.
 
 \section{Expérimentation}
 
