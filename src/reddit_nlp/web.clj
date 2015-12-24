@@ -1,4 +1,5 @@
 (ns reddit-nlp.web
+  (:gen-class)
   (:require [reddit-nlp.dataset :as dataset]
             [org.httpkit.server :as httpkit]
             [hiccup.page :as hiccup]
@@ -18,6 +19,9 @@
 
 (def subreddits ["news"
                  "worldnews"
+                 "justintrudeau"
+                 "Pets"
+                 "comicbookmovies"
                  "johncena"])
 
 (defn color-picker-generator

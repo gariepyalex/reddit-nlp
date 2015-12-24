@@ -13,6 +13,7 @@ pom.xml.asc
 /report/*.aux
 /report/*.log
 /report/*.out
+/report/*.pdf
 
 # emacs
 *~

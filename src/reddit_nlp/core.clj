@@ -1,7 +1,8 @@
 (ns reddit-nlp.core
   (:require [reddit-nlp.reddit :as reddit]
             [reddit-nlp.stanford-nlp-wrapper :as nlp]
-            [reddit-nlp.duckduckgo :as ddgo]))
+            [reddit-nlp.duckduckgo :as ddgo]
+            [reddit-nlp.dataset :as dataset]))
 
 (defn- count-or-two
   [elements]
@@ -26,3 +27,9 @@
                :sentiment (comments-average-sentiment (reddit/flatten-comments (reddit/comments-of-post post)))
                :topics (ddgo/structured-instant-answers (nlp/analyze-named-entities (reddit/title-of-post post)))
                }))))
+
+;; The simplest way to run this is with 'lein run -m reddit-nlp.core subreddit-name'
+(defn -main
+  [subreddit & args]
+  (dataset/create-webdataset! subreddit (cards subreddit 20))
+  (println "dataset has been created"))

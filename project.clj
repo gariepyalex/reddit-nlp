@@ -5,11 +5,12 @@
                  [cheshire "5.5.0"]
                  [http-kit "2.1.18"]
                  [hiccup "1.0.5"]
-                 [compojure "1.4.0" :exclusions [joda-time]]
-                 [ring/ring-defaults "0.1.5"]
-                 [edu.stanford.nlp/stanford-corenlp "3.5.2"]]
-  :resource-paths ["resources" "lib/stanford-corenlp-models-current.jar"]
+                 [compojure "1.4.0"]
+                 [ring/ring-defaults "0.1.5"]]
+  :resource-paths ["resources"]
   :main ^:skip-aot reddit-nlp.web
   :test-paths ["test"]
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:dev {:dependencies [[edu.stanford.nlp/stanford-corenlp "3.5.2"]]
+                   :resource-paths ["lib/stanford-corenlp-models-current.jar"]}
+             :uberjar {:aot [reddit-nlp.web]}})

@@ -1,7 +1,6 @@
 (ns reddit-nlp.dataset
   (:require [clojure.java.io :as io]
-            [reddit-nlp.reddit :as reddit]
-            [reddit-nlp.core :as core]))
+            [reddit-nlp.reddit :as reddit]))
 
 (def dataset-base-dir "resources/dataset/")
 
@@ -42,15 +41,8 @@
 
 (defn webdataset
   [subreddit]
-  (let [file (io/file (io/resource (str "webdataset/" subreddit)))]
+  (let [file (io/resource (str "webdataset/" subreddit))]
     (if file
       (read-string (slurp file))
       {:cards []})))
 
-;; The simplest way to run this is with 'lein run -m reddit-nlp.dataset subreddit-name'
-(defn -main
-  [subreddit & args]
-  ;; (let [posts (reddit/hot-posts-of-subreddit subreddit)]
-  ;;   (create-dataset! posts))
-  (create-webdataset! subreddit (core/cards subreddit 20))
-  (println "dataset has been created"))
