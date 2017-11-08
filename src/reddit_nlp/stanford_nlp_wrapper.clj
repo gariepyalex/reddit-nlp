@@ -29,7 +29,7 @@
                           :1 "Negative"
                           :2 "Neutral"
                           :3 "Positive"
-                          :4 "Very negative"}))
+                          :4 "Very positive"}))
 
 (defn- annotate-tokens
   [^CoreMap sentence]
